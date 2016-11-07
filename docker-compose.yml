@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  debug:
+    image: tjenwellens/tomcat
+    command: /bin/sh -c "catalina.sh jpda start ; tail -F -n0 /etc/hosts"
+    volumes:
+      - ./war:/usr/local/tomcat/webapps/springapp
+    environment:
+      - JPDA_ADDRESS="1043"
+    ports:
+      - "8080:8080"
+      - "1043:1043"
