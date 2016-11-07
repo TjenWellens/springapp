@@ -7,7 +7,12 @@
     <property name="web.dir" value="war"/>
     <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
     <property name="name" value="springapp"/>
+    <property name="war.file" value="${name}.war"/>
     <property name="test.dir" value="test"/>
+
+    <property name="webapp.name" value="${name}"/>
+    <property name="tomcat.username" value="${tomcat.manager.username}"/>
+    <property name="tomcat.password" value="${tomcat.manager.password}"/>
 
     <path id="master-classpath">
         <fileset dir="${web.dir}/WEB-INF/lib">
@@ -57,16 +62,19 @@
         </copy>
     </target>
 
-    <target name="deploywar" depends="build" description="Deploy application as a WAR file">
-        <war destfile="${name}.war"
-             webxml="${web.dir}/WEB-INF/web.xml">
-            <fileset dir="${web.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </war>
+    <target name="buildwar" depends="build" description="Compile main source tree java files">
+      <war destfile="${war.file}"
+           webxml="${web.dir}/WEB-INF/web.xml">
+          <fileset dir="${web.dir}">
+              <include name="**/*.*"/>
+          </fileset>
+      </war>
+    </target>
+
+    <target name="deploywar" depends="buildwar" description="Deploy application as a WAR file">
         <copy todir="${deploy.path}" preservelastmodified="true">
             <fileset dir=".">
-                <include name="*.war"/>
+                <include name="${war.file}"/>
             </fileset>
         </copy>
     </target>
@@ -86,7 +94,6 @@
       </fileset>
     </path>
 
-    <!--TUTORIAL
     <taskdef name="catalina-deploy"     classname="org.apache.catalina.ant.DeployTask"    classpathref="catalina-ant-classpath"/>
     <taskdef name="catalina-list"       classname="org.apache.catalina.ant.ListTask"      classpathref="catalina-ant-classpath"/>
     <taskdef name="catalina-reload"     classname="org.apache.catalina.ant.ReloadTask"    classpathref="catalina-ant-classpath"/>
@@ -95,7 +102,6 @@
     <taskdef name="catalina-start"      classname="org.apache.catalina.ant.StartTask"     classpathref="catalina-ant-classpath"/>
     <taskdef name="catalina-stop"       classname="org.apache.catalina.ant.StopTask"      classpathref="catalina-ant-classpath"/>
     <taskdef name="catalina-undeploy"   classname="org.apache.catalina.ant.UndeployTask"  classpathref="catalina-ant-classpath"/>
-    -->
 
 
     <taskdef name="install" classname="org.apache.catalina.ant.DeployTask">
@@ -114,7 +120,6 @@
         <classpath refid="catalina-ant-classpath"/>
     </taskdef>
 
-    <!--
     <target name = "stop-webapp">
        <catalina-stop url="${tomcat.manager.url}"
                          username="${tomcat.username}"
@@ -145,7 +150,6 @@
                             path="/${webapp.name}"
                             war="file:${war.file}"/>
     </target>
-    -->
 
     <target name="install" description="Install application in Tomcat">
         <install url="${tomcat.manager.url}"
