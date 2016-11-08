@@ -1,0 +1,11 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Spring Application</name>
+  <groupId>eu.tjenwellens</groupId>
+  <artifactId>springapp</artifactId>
+  <version>1</version>
+
+  <dependencies>
+  </dependencies>
+
+</project>
